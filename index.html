@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Mapas de Densidad de la Colonia Roma</title>
+	<link href="../img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"> -->
+	<link rel="stylesheet" href="css/fontawesome-webfont.css"/>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css">
+	
+	<link href="css/styleHeat.css" rel="stylesheet" type="text/css" />
+
+<!--	<script> 
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-64251997-1', 'auto');
+	  ga('send', 'pageview');
+	</script> -->
+</head>
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="navbar-header">
+		<div class="navbar-icon-container">
+			<!-- <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+			<a href="#" class="navbar-icon pull-right visible-xs" id="helpxs-btn"><i class="fa fa-question-circle white"></i></a> -->
+			<a href="#" class="navbar-icon pull-right visible-xs" id="aboutxs-btn"><i class="fa fa-info-circled white"></i></a>
+			<a href="../" class="navbar-icon pull-right visible-xs" id="homexs-btn"><i class="fa fa-home white"></i></a>
+		</div>
+		<span class="navbar-brand">Mapas de Densidad</span>
+	</div>
+	<div class="navbar-collapse collapse" id="hidden-bar">
+		<ul class="nav navbar-nav" style="display:none;" id="tools">
+			<li><a href="../" data-toggle="collapse" data-target=".navbar-collapse.in" id="home-btn"><i class="fa fa-home white"></i>&nbsp;&nbsp;Inicio</a></li>
+			<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-info-circled white"></i>&nbsp;&nbsp;Acerca de</a></li>
+			<!--
+			<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="help-btn" class="hidden-xs"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;Ayuda</a></li>
+			<li><a data-toggle="collapse" data-target=".navbar-collapse.in" id="usr-btn"><i class="fa fa-user white"></i>&nbsp;&nbsp;Hola </a></li>
+			<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-sign-in white"></i>&nbsp;&nbsp;Iniciar sesi&oacute;n</a></li>
+			<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="reg-btn"><i class="fa fa-pencil white"></i>&nbsp;&nbsp;Registro</a></li>
+			<li><a href="?logout" data-toggle="collapse" data-target=".navbar-collapse.in" id="logout-btn"><i class="fa fa-sign-out white"></i>&nbsp;&nbsp;Cerrar sesi&oacute;n</a></li>
+			<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="contact-btn"><i class="fa fa-at white"></i>&nbsp;&nbsp;Contacto/Reportar un problema</a></li>
+			 -->
+		</ul>
+	</div><!--/.navbar-collapse -->
+</div>
+<div id="progress"><div id="progress-bar">Cargando...</div></div>
+
+<div id="selectCategoria1">
+	<select id="categoria1" name="categoria1"> <!-- onmousedown="this.size=8;" onchange='this.size=0;' onblur="this.size=0;">  -->
+		<option disabled selected value="">--- Selecciona categor&iacute;a 1 ---</option>
+		<option value="1">Robo a Transeunte</option>
+		<option value="2">Robo a Negocio</option>
+		<option value="3">Robo a Vehiculo</option>
+		<option value="0">Ninguna</option>
+	</select>
+</div>
+<div id="selectCategoria2">
+	<select id="categoria2" name="categoria2"> <!-- onmousedown="this.size=8;" onchange='this.size=0;' onblur="this.size=0;">  -->
+		<option disabled selected value="">--- Selecciona categor&iacute;a 2 ---</option>
+		<option value="1">Robo a Transeunte</option>
+		<option value="2">Robo a Negocio</option>
+		<option value="3">Robo a Vehiculo</option>
+		<option value="0">Ninguna</option>
+
+	</select>
+</div>
+
+<div id="map"></div>
+
+<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Mapas de Densidad</h4>
+			</div>
+			<div class="modal-body">
+				Puedes escoger una o dos categor&iacute;as para crear los mapas de densidad de manera din&aacute;mica. Si escoges dos categor&iacute;as puedes
+				visualizar su intersecci&oacute;n en el mapa.  
+				<br><br>
+				Estos mapas de densidad se actualizan de acuerdo a los datos introducidos en el Mapa Ciudadano.
+				<br><br>
+				El control que se ubica en la esquina superior derecha del mapa te permite cambiar entre distintos mapas base. &iexcl;Pru&eacute;balos! Tambi&eacute;n te permite 
+				activar o desactivar las capas de los mapas de densidad.
+				<br><br>
+				El control que se ubica en la esquina superior izquierda del mapa te permite cambiar el nivel de acercamiento del mapa.
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&amp;sensor=false"></script>
+<script type="text/javascript" src="../../recursos/leaflet-plugins/layer/tile/Google.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+
+<script type="text/javascript" src="js/heatmap.js"></script>
+<script type="text/javascript" src="js/leaflet-heatmap.js"></script>
+<script type="text/javascript" src="functions.js"></script>
+</body>
+</html>
